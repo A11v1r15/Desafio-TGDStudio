@@ -7,16 +7,18 @@ public class Player : MonoBehaviour
 
 	[SerializeField] private float velocity;
 	[SerializeField] private float force;
-	[SerializeField] private bool flip;
-	[SerializeField] private bool jumping;
+	[SerializeField] private bool  flip;
+	[SerializeField] private bool  jumping;
 
-	[SerializeField] private Rigidbody2D _rigidbody2d;
+	[SerializeField] private Rigidbody2D    _rigidbody2d;
 	[SerializeField] private SpriteRenderer _spriteRenderer;
+
+
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		_rigidbody2d = GetComponent<Rigidbody2D>();
+		_rigidbody2d    = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 
 		Flip = false; //Inicia olhando para direita
@@ -57,7 +59,7 @@ public class Player : MonoBehaviour
 		if(!Jumping) ForceTo(transform.up * Force);
 	}
 
-	private void ForceTo(Vector2 v)
+	public void ForceTo(Vector2 v)
 	{
 		_rigidbody2d.AddForce(v, ForceMode2D.Impulse);
 	}
@@ -68,8 +70,25 @@ public class Player : MonoBehaviour
 		else _spriteRenderer.flipX = false;
 	}
 
-	//Getters e Setters
-	public float Velocity
+    //Colisões
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+		string tag = collision.gameObject.tag;
+
+		Debug.Log(tag);
+
+        if (tag == "Fruit")
+        {
+			collision.gameObject.GetComponent<Fruit>().Collect();
+        } else if(tag == "Enemy")
+        {
+			collision.gameObject.GetComponent<Projectil>().Hit();
+			Destroy(this.gameObject);
+        }
+    }
+
+    //Getters e Setters
+    public float Velocity
 	{
 		get { return this.velocity; }
 		set { this.velocity = value; }
