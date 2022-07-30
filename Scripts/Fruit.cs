@@ -12,6 +12,8 @@ public class Fruit : MonoBehaviour
 
         GameObject ec = Instantiate(effectCollect, transform.position, transform.rotation);
 
+        GameObject.Find("Player").GetComponent<Player>().Fruits++;
+
         Destroy(this.gameObject);
     }
 }
